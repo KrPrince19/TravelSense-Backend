@@ -22,7 +22,7 @@ const handleAssistantQuery = async (req, res) => {
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
     // Fetch Weather Logic
-    const weather = await getCurrentWeather(location);
+    const weather = await getCurrentWeather(location, coordinates);
     const weatherContext = weather 
       ? `Current Weather: ${weather.temp}°C, ${weather.condition}. ${weather.isRainy ? "⚠️ WARN: It is raining, prioritized indoor activities." : "Expect clear weather."}`
       : "Weather data currently unavailable.";

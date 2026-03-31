@@ -1,18 +1,23 @@
 // Using built-in fetch (Node 18+)
 
 /**
- * Fetches current weather for a city using wttr.in (Keyless)
- * Format: https://wttr.in/Nellore?format=j1
+ * Fetches current weather using coordinates or city using wttr.in (Keyless)
+ * Support for coordinates: https://wttr.in/lat,lon?format=j1
  */
-const getCurrentWeather = async (city) => {
+const getCurrentWeather = async (city, coordinates = null) => {
   try {
-    if (!city) return null;
+    if (!city && !coordinates) return null;
 
-    const response = await fetch(`https://wttr.in/${encodeURIComponent(city)}?format=j1`);
+    // Use coordinates if available for better accuracy
+    let query = encodeURIComponent(city);
+    if (coordinates && coordinates.lat && coordinates.lon) {
+      query = `${coordinates.lat},${coordinates.lon}`;
+    }
+
+    const response = await fetch(`https://wttr.in/${query}?format=j1`);
     const data = await response.json();
 
     const current = data.current_condition[0];
-    const nearestArea = data.nearest_area[0];
 
     return {
       temp: current.temp_C,
